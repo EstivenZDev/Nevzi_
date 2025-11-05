@@ -25,7 +25,7 @@ export const Navbar = () => {
       <div className="px-40 flex justify-around items-center h-[70px]">
         {/* Logo */}
         <div className="flex justify-center items-center">
-          <p className="text-4xl font-bold">NEVZI</p>
+          <p className="text-4xl font-bold text-black">NEVZI</p>
         </div>
 
         {/* Botón hamburguesa */}
@@ -48,8 +48,8 @@ export const Navbar = () => {
 
         {/* Iconos */}
         <div className="car-profile [@media(max-width:900px)]:hidden flex items-center gap-5">
-          <Link href="/login"><CircleUser  /></Link>
-          <ShoppingCart />
+          <Link href="/login"><CircleUser className="text-black" /></Link>
+          <ShoppingCart className="text-black" />
         </div>
       </div>
 

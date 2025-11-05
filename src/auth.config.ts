@@ -1,5 +1,6 @@
 // para que VSCode ayude con autocompletado y valide que tu objeto de configuración tenga la estructura correcta (páginas, callbacks, providers, etc.).
 import type { NextAuthConfig } from "next-auth";
+import { async } from '../.next/dev/types/routes';
 
 
 //exportando el objeto authConfig, que contiene toda la configuración base de NextAuth.
@@ -23,6 +24,8 @@ export const authConfig = {
       if (isOnDashboard && !isLoggedIn) return false; // Si no está logueado, bloquea
       return true; // Permite el acceso
     },
+
+    
   },
 
   //Aquí defines los métodos de autenticación (por ejemplo, con credenciales, Google, GitHub, etc.).
