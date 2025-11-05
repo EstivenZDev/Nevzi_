@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateUserProps } from "./user.types";
+import { UserProps }  from "./user.types";
 
 
 export const getUsers = async () => {
@@ -7,7 +7,7 @@ export const getUsers = async () => {
     return res.data
 }
 
-export const createUsers = async ({name, email, password, role}:CreateUserProps) => {
+export const createUsers = async ({name, email, password, role}:UserProps) => {
     try {
         const res = await axios.post("/api/user", {
             name: name,
