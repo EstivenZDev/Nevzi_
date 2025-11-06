@@ -1,17 +1,40 @@
 import mongoose from "mongoose";
 
-export const dbConnection = async () => {
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-  try {
-    const mongodbAtlas = process.env.MONGODB_URI || ""; 
-    await mongoose.connect(mongodbAtlas);
+if (!MONGODB_URI) {
+  throw new Error("❌ No se encontró la variable MONGODB_URI");
+}
 
-    console.log('DB Online');
+// 👇 Guardamos la conexión en un objeto global para reutilizarla
+let cached = (global as any).mongoose;
 
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error en la base de datos - Hable con el administrador");
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
+}
+
+export async function dbConnection() {
+  if (cached.conn) {
+    // Ya existe una conexión activa, la reutilizamos
+    return cached.conn;
   }
-};
 
-export default dbConnection;
+  if (!cached.promise) {
+    // Si no existe, creamos una nueva promesa de conexión
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        bufferCommands: false, // Evita comandos en cola mientras se conecta
+      })
+      .then((mongoose) => {
+        console.log("✅ MongoDB conectado correctamente");
+        return mongoose;
+      })
+      .catch((err) => {
+        console.error("❌ Error al conectar con MongoDB:", err);
+        throw err;
+      });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}

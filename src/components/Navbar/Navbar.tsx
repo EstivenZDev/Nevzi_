@@ -1,10 +1,17 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { Menu, X, CircleUser, ShoppingCart } from "lucide-react";
+import { Menu, X, CircleUser, ShoppingCart, LogOut } from "lucide-react";
 import style from "./navbar.module.css";
+import { useSession, signOut } from "next-auth/react";
+import { Button } from "@heroui/react";
+
+
 
 export const Navbar = () => {
+
+  const { data: session} = useSession();
+
   const [open, setOpen] = useState(false);
 
   const toggleMenu = () => setOpen(!open);
@@ -19,6 +26,8 @@ export const Navbar = () => {
 
     window.addEventListener("resize", handleResize);
   }, []);
+
+
 
   return (
     <nav className="relative w-full">
@@ -50,6 +59,9 @@ export const Navbar = () => {
         <div className="car-profile [@media(max-width:900px)]:hidden flex items-center gap-5">
           <Link href="/login"><CircleUser className="text-black" /></Link>
           <ShoppingCart className="text-black" />
+          {session && (
+            <Button onClick={()=>{signOut()}}><LogOut/></Button>
+          )}
         </div>
       </div>
 

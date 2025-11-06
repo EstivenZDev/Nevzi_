@@ -7,13 +7,17 @@ export const getUsers = async () => {
     return res.data
 }
 
-export const createUsers = async ({name, email, password, role}:UserProps) => {
+export const getUserByEmail = async (email) => {
+    const {data:{user}} = await axios.get(`/api/user?email=${encodeURIComponent(email)}`)
+    return user
+}
+
+export const createUser = async ({name, email, password}:UserProps) => {
     try {
         const res = await axios.post("/api/user", {
             name: name,
             email: email,
-            password: password,
-            role: role
+            password: password
         }, {
             headers: {
                 "Content-Type": "application/json"

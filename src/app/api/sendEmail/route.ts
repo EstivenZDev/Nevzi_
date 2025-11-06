@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { auth } from "@/auth";
+import { auth } from "../auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
   try {

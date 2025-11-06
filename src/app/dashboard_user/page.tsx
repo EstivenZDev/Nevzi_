@@ -1,18 +1,25 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  // ⏩ Redirigir solo cuando ya se sepa que está desautenticado
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   if (status === "loading") {
     return <p>Cargando...</p>;
   }
 
   if (status === "unauthenticated") {
-    router.push("/login");
-    return null;
+    return null; // Evita renderizar contenido mientras redirige
   }
 
   return (
