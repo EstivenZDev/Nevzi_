@@ -7,7 +7,7 @@ export const getUsers = async () => {
     return res.data
 }
 
-export const getUserByEmail = async (email) => {
+export const getUserByEmail = async (email:string) => {
     const {data:{user}} = await axios.get(`/api/user?email=${encodeURIComponent(email)}`)
     return user
 }

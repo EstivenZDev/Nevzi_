@@ -31,7 +31,7 @@ export const POST = async (req: Request) => {
 
 
     return NextResponse.json({ message: "Nuevo evento registrado" }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Error interno" }, { status: 500 });
   }
