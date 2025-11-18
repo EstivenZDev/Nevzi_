@@ -36,6 +36,7 @@ export const authConfig: NextAuthConfig = {
 					id: user._id.toString(),
 					name: user.name,
 					email: user.email,
+					role: user.role
 				};
 			},
 		}),
@@ -66,7 +67,22 @@ export const authConfig: NextAuthConfig = {
 			// ✅ Permitir login en cualquier caso
 			return true;
 		},
+		async jwt({ token, user }) {
+			// 👇 Esto corre solo en el primer login
+			if (user) {
+				token.role = user.role;
+			}
+			return token;
+		},
+
+		async session({ session, token }) {
+			if (session.user) {
+				session.user.role = token.role ?? "";
+			}
+			return session;
+		}
 	},
+
 
 
 	pages: {

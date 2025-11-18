@@ -1,6 +1,7 @@
 "use client";
 
 import { getUserByEmail } from "@/services/user/user";
+import { useSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
@@ -10,7 +11,6 @@ import Link from "next/link";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,13 +28,19 @@ export default function LoginPage() {
         }
 
         if (result?.ok) {
-            window.location.href = "/dashboard";
+            const sessionRes = await fetch("/api/auth/session");
+            const session = await sessionRes.json();
+            
+            if(session?.user?.role=="admin"){
+                window.location.href ="/dashboard"
+            } else {
+                window.location.href = "/"
+            }
         }
-
     };
 
     const handleGoogleLogin = () => {
-        signIn("google", { callbackUrl: "/dashboard_user" });
+        signIn("google", { callbackUrl: "/" });
     };
 
     return (

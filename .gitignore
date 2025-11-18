@@ -10,8 +10,12 @@
 !.yarn/releases
 !.yarn/versions
 
+# Cypress-related files and folders
+/cypress
+
 # testing
 /coverage
+
 
 # next.js
 /.next/

@@ -6,12 +6,15 @@ import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className='dark'>
+    <html lang="en">
       <body>
+
         <SessionProvider>
           <Providers>
             <Navbar />
-            {children}
+            <main>
+              {children}
+            </main>
           </Providers>
         </SessionProvider>
       </body>

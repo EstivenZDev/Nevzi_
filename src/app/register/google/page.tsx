@@ -1,6 +1,6 @@
 import { auth } from "@/auth"; // tu helper de next-auth
 import UsersModel from "@/database/models/user";
-import dbConnection from "@/lib/dbConnection";
+import { dbConnection } from "@/lib/dbConnection";
 import { redirect } from "next/navigation";
 
 export default async function RegisterWithGooglePage() {
