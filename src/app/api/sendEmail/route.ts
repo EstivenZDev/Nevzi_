@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     });
 
     return Response.json({ res: "Mensaje enviado" }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Error en sendEmail:", error);
     return Response.json(
       { error: "Error enviando correo", details: error.message },

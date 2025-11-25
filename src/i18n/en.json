@@ -1,0 +1,29 @@
+{
+  "login": {
+    "title": "Login",
+    "subtitle": "Sign in to your account",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submitButton": "Sign In",
+    "signingIn": "Signing in...",
+    "registerLink": "Don't have an account? Register",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "passwordRequired": "Password is required",
+      "loginError": "Error signing in"
+    }
+  },
+  "navbar":{
+    "home": "Home",
+    "shop": "Shop",
+    "aboutus":"About us",
+    "contactus":"Contact us",
+    "cartTitle": "Your cart",
+    "mustRegister": "You must register to checkout",
+    "products": "Products",
+    "pay": "Pay"
+  }
+}

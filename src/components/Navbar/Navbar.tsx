@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useContext } from "react";
-import { Menu, X, CircleUser, ShoppingCart, LogOut } from "lucide-react";
+import { Menu, X, CircleUser, ShoppingCart, LogOut, Languages } from "lucide-react";
 import style from "./navbar.module.css";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@heroui/react";
@@ -9,23 +9,23 @@ import { CardProductCar } from "../CardProductCar/CardProductCar";
 import { ShoppingCartContext } from "@/context/ShoppingCarContext";
 import ButtonBlack from "../ButtonBlack/ButtonBlack";
 import { useShoppingCart } from "@/hooks/useShoppingCart";
-
+import { useLanguage } from "@/context/LanguageContext";
+import { languages } from "@/i18n";
 
 
 export const Navbar = () => {
 
+    const {t, language, setLanguage} = useLanguage()
     const { data: session } = useSession();
-
     const [open, setOpen] = useState(false);
-
     const toggleMenu = () => setOpen(!open);
-
     const [showCar, setShowCar] = useState(false)
-
     const [counterProducts, setCounterProducts] = useState(0)
+    const [showSelect, setShowSelect] = useState(false);
+    // const context = useContext(ShoppingCartContext);
+    // const { productsList, setProductsList, total, setTotal } = useShoppingCart();
 
-    const context = useContext(ShoppingCartContext);
-    const { productsList, setProductsList, total, setTotal } = useShoppingCart();
+    
 
 
     // 🔥 Cierra el menú si se agranda la pantalla a más de 900px
@@ -42,7 +42,7 @@ export const Navbar = () => {
 
 
     return (
-        
+
         <nav className="relative w-full bg-white">
             <div className="px-40 flex justify-around items-center h-[70px]">
                 {/* Logo */}
@@ -62,16 +62,41 @@ export const Navbar = () => {
                 <div
                     className={`${style["font-color-two"]} flex items-center gap-10 transition-all duration-300 ease-in-out max-[900px]:hidden`}
                 >
-                    <Link href="./">Inicio</Link>
-                    <Link href="/shop">Tienda</Link>
-                    <Link href="/aboutour" className="pointer-events-none text-gray-400 cursor-not-allowed">Sobre nosotros</Link>
-                    <Link href="/contact" className="pointer-events-none text-gray-400 cursor-not-allowed">Contáctanos</Link>
+                    <Link href="/">{t("navbar.home")}</Link>
+                    <Link href="/shop">{t("navbar.shop")}</Link>
+                    <Link href="/aboutour" className="pointer-events-none text-gray-400 cursor-not-allowed">{t("navbar.aboutus")}</Link>
+                    <Link href="/contact" className="pointer-events-none text-gray-400 cursor-not-allowed">{t("navbar.contactus")}</Link>
                 </div>
 
                 {/* Iconos */}
                 <div className="car-profile [@media(max-width:900px)]:hidden flex items-center gap-5">
                     <Link href="/login"><CircleUser className="text-black" /></Link>
                     <button className="cursor-pointer" onClick={() => { setShowCar(true) }}><ShoppingCart className="text-black" /></button>
+                    <div className="relative">
+                        <Languages
+                            className="cursor-pointer"
+                            onClick={() => setShowSelect(!showSelect)} />
+                        {showSelect && (
+                            <select
+                                className="absolute top-8 right-0 border rounded-lg px-2 py-1 bg-white shadow-md border-none"
+                                value={language}
+                                onChange={(e)=>{setLanguage(e.target.value as 'en' | 'es')}}
+                            >
+                                {languages.map((lang)=>(
+                                    <option className="font-semibold border-none bg-white hover:bg-transparent" value={lang.code} key={lang.code}>{lang.name}</option>
+                                ))
+
+                                }
+
+
+                            </select>
+                        )}
+                    </div>
+
+
+
+
+
                     {session && (
                         <Button onClick={() => { signOut() }}><LogOut /></Button>
                     )}
@@ -98,13 +123,13 @@ export const Navbar = () => {
 
                             <div className="flex flex-col  h-full justify-between">
                                 <div className="p-6 mt-8 flex justify-center flex-col ">
-                                    <h2 className="text-2xl font-semibold mb-6 text-center">Tu carrito</h2>
+                                    <h2 className="text-2xl font-semibold mb-6 text-center">{t('navbar.cartTitle')}</h2>
                                     {/* className="space-y-4" */}
                                     {!session ? (
-                                        <h1 className="text-white p-4 bg-black rounded-md">Debes registrarte para poder pagar</h1>
+                                        <h1 className="text-white p-4 bg-black rounded-md">{t('navbar.mustRegister')}</h1>
                                     ) : (
                                         <div>
-                                            <div className="flex justify-start"><h2 className="font-semibold">Productos({counterProducts})</h2></div>
+                                            <div className="flex justify-start"><h2 className="font-semibold">{t('navbar.products')}({counterProducts})</h2></div>
                                             <div className="flex flex-col gap-5">
                                                 <CardProductCar />
                                             </div>
@@ -119,7 +144,7 @@ export const Navbar = () => {
                                         <span className="font-bold">{total} $</span>
                                     </div>
                                     <div className="flex justify-center">
-                                        <ButtonBlack content="Pagar"/>
+                                        <ButtonBlack content={t('navbar.pay')} />
                                     </div>
                                 </div>
                             </div>
@@ -133,17 +158,17 @@ export const Navbar = () => {
             {open && (
                 <div className="absolute top-[70px] left-0 w-full bg-black border-t border-gray-700 transition-all duration-300 ease-in-out">
                     <div className="flex flex-col space-y-4 px-6 py-4 text-white">
-                        <Link href="" onClick={() => setOpen(false)}>
-                            Inicio
+                        <Link href="/" onClick={() => setOpen(false)}>
+                            {t('navbar.home')}
                         </Link>
-                        <Link href="" onClick={() => setOpen(false)}>
-                            Tienda
+                        <Link href="/shop" onClick={() => setOpen(false)}>
+                            {t('navbar.shop')}
                         </Link>
-                        <Link href="" onClick={() => setOpen(false)}>
-                            Nosotros
+                        <Link href="/aboutour" onClick={() => setOpen(false)}>
+                            {t('navbar.aboutus')}
                         </Link>
-                        <Link href="" onClick={() => setOpen(false)}>
-                            Contacto
+                        <Link href="/contact" onClick={() => setOpen(false)}>
+                            {t('navbar.contactus')}
                         </Link>
                         <Link href="/login"><CircleUser className="text-white" /></Link>
                         <button className="cursor-pointer" onClick={() => { setShowCar(true) }}><ShoppingCart className="text-white" /></button>
@@ -152,7 +177,7 @@ export const Navbar = () => {
             )}
         </nav>
     );
-    
+
 };
 
 export default Navbar;

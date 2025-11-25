@@ -1,46 +1,71 @@
-"use client"
+"use client";
 
-import React from 'react'
-import { useSession } from 'next-auth/react';
-import ButtonBlack from '../ButtonBlack/ButtonBlack';
+import React from "react";
+import { useSession } from "next-auth/react";
+import { formatCOP } from "@/utils/formatPrice";
 
 interface ProductProps {
-    image: string
-    title: string;
-    price: number;
-    status: boolean
+  image: string;
+  title: string;
+  price: number;
+  status: boolean;
+  amount: number;
+  category: string;
+  gender: string;
 }
 
+const Card = ({ image, title, price, status, amount, category, gender }: ProductProps) => {
+  const { data: session } = useSession();
 
-const Card = ({ image, title, price, status }: ProductProps) => {
-    const { data: session } = useSession()
+  
+    const realPrice = formatCOP(price)
+  return (
+    <div className="w-[230px] bg-white rounded-xl shadow-lg p-3 hover:shadow-2xl transition-all duration-300 flex flex-col">
+      
+      {/* IMAGEN */}
+      <div className="w-full h-[160px] overflow-hidden rounded-lg">
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
+        />
+      </div>
 
+      {/* INFO */}
+      <div className="mt-3 flex flex-col gap-2 text-sm">
+        <h1 className="font-semibold text-lg line-clamp-2">{title}</h1>
 
-
-
-    return (
-        <div className=' w-[200px] bg-gray-100 p-2'>
-            <div className=' w-full h-[170px]'>
-                <img src={image} alt="" className='w-full h-full rounded-md' />
-            </div>
-            <div>
-                <div className='mt-2 h-[50px]'>
-                    <h1 className='font-bold'>{title}</h1>
-                </div>
-                <div className=' flex mt-5  justify-between items-center p-2'>
-                    <div><h1 className='font-semibold text-[20px]'>{price} $</h1></div>
-                    {status ? (<div className='bg-black rounded-full p-2 text-center font-semibold border text-white'><p >Activo</p></div>) : (<div className='bg-white rounded-full p-2 text-center font-semibold text-black border border-black'><p >Inactivo</p></div>)}
-
-                </div>
-                {session && session.user && session.user.role === "admin" && (
-                    <div className=' flex justify-between p-2 bg-black rounded-xl'>
-                        <button className='bg-black rounded-full p-2 text-center font-semibold  text-white border-1 border-white'>Editar</button>
-                        <button className='bg-black rounded-full p-2 text-center font-semibold  text-white border-1 border-white'>Borrar</button>
-                    </div>
-                )}
-            </div>
+        <div className="flex flex-col gap-1">
+          <p><span className="font-bold">Cantidad:</span> {amount}</p>
+          <p><span className="font-bold">Categoría:</span> {category}</p>
+          <p><span className="font-bold">Género:</span> {gender}</p>
         </div>
-    )
-}
+      </div>
 
-export default Card
+      {/* PRECIO / ESTADO */}
+      <div className="flex items-center justify-between mt-4 flex-wrap">
+        <h1 className="font-bold text-lg">{realPrice} $</h1>
+        <p
+          className={`px-3 py-1 rounded-full text-xs font-semibold 
+            ${status ? "bg-black text-white" : "bg-gray-300 text-black"}`}
+        >
+          {status ? "Activo" : "Inactivo"}
+        </p>
+      </div>
+
+      {/* BOTONES (solo si es admin) */}
+      {session?.user?.role === "admin" && (
+        <div className="flex gap-2 mt-4">
+          <button className="flex-1 bg-white border border-black text-black hover:bg-black hover:text-white  py-1 rounded-lg text-sm font-light transition">
+            Editar
+          </button>
+          <button className="flex-1 bg-black border hover:bg-white hover:text-black text-white py-1 rounded-lg text-sm font-light transition">
+            Borrar
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Card;

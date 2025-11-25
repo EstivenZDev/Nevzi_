@@ -1,38 +1,81 @@
-import { NextResponse } from "next/server";
+import ProductModel from "@/database/models/product";
+import { dbConnection } from "@/lib/dbConnection";
 import cloudinary from "@/utils/cloudinary";
+import { NextRequest, NextResponse } from "next/server";
+import { formatCOP } from "@/utils/formatPrice";
 
-export const POST = async (req: Request) => {
-  try {
-    const formData = await req.formData();
 
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const category = formData.get("category") as string;
-    const file = formData.get("image") as File;
+export async function GET() {
+    try {
+        await dbConnection()
+        const data = await ProductModel.find();
 
-    if (!title || !description || !category || !file) {
-      return NextResponse.json({ error: "Faltan campos o imagen" }, { status: 400 });
+        return NextResponse.json(
+            { message: "Categorias obtenidas", data },
+            { status: 200 }
+        )
+    } catch (error:unknown) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message });
+        }
+        return NextResponse.json({ error: "Error desconocido" });
+    }
+}
+
+export async function POST(req: NextRequest) {
+
+    try {
+        const formData = await req.formData()
+        const body = Object.fromEntries(formData.entries())
+
+        //extraer el file del formdata
+        const file = body.image as File;
+        const buffer = await file.arrayBuffer();
+        const dataUri = `data:${file.type};base64,${Buffer.from(buffer).toString("base64")}`;
+
+        const uploadResult = await cloudinary.uploader.upload(dataUri, {
+            folder: "nevzi",
+            resource_type: "image",
+        });
+
+
+        if (uploadResult.secure_url) {
+
+
+            await dbConnection();
+            const newProduct = new ProductModel({
+                name: body.name,
+                price: Number(body.price),
+                amount: Number(body.amount),
+                category: body.category,
+                image: uploadResult.secure_url,
+                gender: body.gender,
+                status: body.status == "true"
+            });
+
+            const savedProdcut = await newProduct.save();
+
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: "Producto creado correctamente",
+                    data: savedProdcut,
+                },
+                { status: 201 }
+            );
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json(
+                { error: error.message }
+            )
+        } else {
+            return NextResponse.json(
+                { error: "Error desconocido" }
+            )
+        }
     }
 
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const dataUri = `data:${file.type};base64,${buffer.toString("base64")}`;
 
 
-    const result = await cloudinary.uploader.upload(dataUri, {
-      folder: "posts",
-      use_filename: true,
-      resource_type: "image",
-    });
-
-    if (!result.secure_url) {
-      return NextResponse.json({ error: "No se pudo subir la imagen" }, { status: 500 });
-    }
-
-
-    return NextResponse.json({ message: "Nuevo evento registrado" }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Error interno" }, { status: 500 });
-  }
-};
+}
