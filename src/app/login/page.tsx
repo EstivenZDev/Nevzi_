@@ -6,12 +6,14 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { sendEmail } from "@/services/sendEmail";
+import { useRouter } from "next/router";
 
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,9 +36,9 @@ export default function LoginPage() {
 
             
             if(session?.user?.role=="admin"){
-                window.location.href ="/dashboard"
+                router.push("/dashboard")
             } else {
-                window.location.href = "/"
+                router.push("/")
             }
         }
     };
