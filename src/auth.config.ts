@@ -80,6 +80,22 @@ export const authConfig: NextAuthConfig = {
 				session.user.role = token.role ?? "";
 			}
 			return session;
+		},
+
+		async redirect({ url, baseUrl }) {
+			// Si no hay URL especificada, ir al dashboard
+			if (!url || url === '/') {
+				return `${baseUrl}/dashboard`;
+			}
+			// Permitir URLs relativas
+			if (url.startsWith('/')) {
+				return `${baseUrl}${url}`;
+			}
+			// Permitir URLs del mismo origen
+			if (new URL(url).origin === baseUrl) {
+				return url;
+			}
+			return baseUrl;
 		}
 	},
 

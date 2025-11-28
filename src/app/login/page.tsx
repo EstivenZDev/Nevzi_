@@ -6,41 +6,23 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { sendEmail } from "@/services/sendEmail";
-import { useRouter } from "next/navigation";
 
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const result = await signIn("credentials", {
+        // Usar signIn con callbackUrl en lugar de redirect: false
+        // Esto es más seguro y confiable en producción
+        await signIn("credentials", {
             email,
             password,
-            redirect: false,
+            callbackUrl: "/dashboard",
         });
-
-        if (result?.error) {
-            alert("Correo o contraseña incorrectos");
-            console.log(result)
-            return;
-        }
-
-        if (result?.ok) {
-            const sessionRes = await fetch("/api/auth/session");
-            const session = await sessionRes.json();
-
-            
-            if(session?.user?.role=="admin"){
-                router.push("/dashboard")
-            } else {
-                router.push("/")
-            }
-        }
     };
 
     const handleGoogleLogin = () => {
