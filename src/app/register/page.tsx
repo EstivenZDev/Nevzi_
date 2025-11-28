@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { createUser } from "@/services/user/user";
+import { sendEmail } from "@/services/sendEmail";
+import Swal from 'sweetalert2'
+import { Spinner } from "@heroui/react";
+
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -12,11 +16,14 @@ export default function RegisterPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false)
+    const Swal = require('sweetalert2')
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-
+        setLoading(true)
         try {
             const data = await createUser({ name, email, password })
             const redirectToDashboard = await signIn("credentials", {
@@ -26,24 +33,44 @@ export default function RegisterPage() {
             })
 
             if (redirectToDashboard?.ok) {
-                window.location.href = "/dashboard_user";
+                await Swal.fire({
+                    title: "¡Registro exitoso!",
+                    text: "Tu cuenta ha sido creada correctamente.",
+                    icon: "success",
+                    background: "#ffffff",
+                    color: "#000000",
+                    iconColor: "#000000",
+                    confirmButtonText: "Continuar",
+                    confirmButtonColor: "#000000",
+                });
+                
+
+
+
+                window.location.href = "/";
+
+                await sendEmail()
             }
 
         } catch (err) {
             setError("Error de conexión con el servidor");
+            console.log(err)
+        } finally {
+            setLoading(false)
         }
     };
 
-    const handleRegisterGoogle = async () =>{
-        try{
-            const registerWithGoogle = await signIn("google",{callbackUrl:"/dashboard_user"})
-        } catch(error){
+    const handleRegisterGoogle = async () => {
+        try {
+            const registerWithGoogle = await signIn("google", { callbackUrl: "/dashboard_user" })
+        } catch (error) {
             console.log(error)
         }
     }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-white px-4">
+            <button></button>
             <div className="w-full max-w-md space-y-8">
                 <div className="text-center">
                     <h2 className="text-3xl font-extrabold text-gray-900">Crea tu cuenta</h2>
@@ -95,9 +122,10 @@ export default function RegisterPage() {
 
                     <button
                         type="submit"
-                        className="w-full bg-black text-white py-2 rounded-full font-medium hover:opacity-90 transition"
+                        className="w-full bg-black text-white py-2 rounded-full font-medium hover:opacity-90 transition text-center"
                     >
-                        Registrarse
+
+                        {loading ? (<Spinner classNames={{ label: "text-foreground mt-4" }} label="Cargando" variant="dots" />) : "Registrarse"}
                     </button>
                 </form>
 

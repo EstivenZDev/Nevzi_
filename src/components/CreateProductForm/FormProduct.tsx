@@ -4,9 +4,14 @@ import { newProduct } from "@/services/product/product";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+interface CategoryProps {
+    _id: string
+    name: string
+}
+
 export default function CreateProductForm() {
     const [message, setMessage] = useState("");
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState<CategoryProps[]>([])
     const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {

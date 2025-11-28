@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
+import { sendEmail } from "@/services/sendEmail";
 
 
 
@@ -30,6 +31,7 @@ export default function LoginPage() {
         if (result?.ok) {
             const sessionRes = await fetch("/api/auth/session");
             const session = await sessionRes.json();
+
             
             if(session?.user?.role=="admin"){
                 window.location.href ="/dashboard"
@@ -56,6 +58,7 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                     <div>
                         <input
+                            name="emailInput"
                             type="email"
                             placeholder="Correo electrónico"
                             value={email}
@@ -67,6 +70,7 @@ export default function LoginPage() {
 
                     <div>
                         <input
+                            name="passwordInput"
                             type="password"
                             placeholder="Contraseña"
                             value={password}

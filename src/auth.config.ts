@@ -27,7 +27,7 @@ export const authConfig: NextAuthConfig = {
 
 				if (!user) throw new Error("Usuario no encontrado");
 
-				if (user.password !== credentials.password) {
+				if (user.password !== String(credentials.password)) {
 					throw new Error("Contraseña incorrecta");
 				}
 

@@ -5,9 +5,20 @@ import Image from 'next/image';
 import { getProducts } from '@/services/product/product';
 import { Spinner } from '@heroui/react';
 
+interface ProductProps {
+  _id: string;
+  name: string;
+  image: string;
+  price: number;
+  status:boolean;
+  gender: string;
+  amount: number;
+  category: string
+}
+
 const ShopPage = () => {
 
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState<ProductProps[]>([])
     const [statusGet, setStatusGet] = useState<number>()
     const [loading, setLoading] = useState(false)
 
@@ -32,7 +43,7 @@ const ShopPage = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <Spinner classNames={{ label: "text-foreground mt-4" }} label="Cargando" variant="dots" />
+                <Spinner color='default' classNames={{ label: "text-foreground mt-4" }} label="Cargando" variant="wave" />
             </div>
         );
     }

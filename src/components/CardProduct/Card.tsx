@@ -8,10 +8,10 @@ interface ProductProps {
   image: string;
   title: string;
   price: number;
-  status: boolean;
-  amount: number;
-  category: string;
-  gender: string;
+  status?: boolean;
+  amount?: number;
+  category?: string;
+  gender?: string;
 }
 
 const Card = ({ image, title, price, status, amount, category, gender }: ProductProps) => {

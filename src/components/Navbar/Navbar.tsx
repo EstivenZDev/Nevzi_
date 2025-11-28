@@ -22,8 +22,8 @@ export const Navbar = () => {
     const [showCar, setShowCar] = useState(false)
     const [counterProducts, setCounterProducts] = useState(0)
     const [showSelect, setShowSelect] = useState(false);
-    // const context = useContext(ShoppingCartContext);
-    // const { productsList, setProductsList, total, setTotal } = useShoppingCart();
+    const context = useContext(ShoppingCartContext);
+    const { productsList, setProductsList, total, setTotal } = useShoppingCart();
 
     
 

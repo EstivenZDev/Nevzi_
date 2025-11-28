@@ -8,9 +8,9 @@ import { averageCalculator } from "@/lib/utils";
 export default function Home() {
     return (
         <>
-            <section className="  flex flex-col items-center">
-                <div className=" text-black flex flex-wrap  gap-5 justify-center">
-                    <div className=" w-[400px] flex flex-col gap-5">
+            <section className="  flex flex-col items-center mt-10  justify-center">
+                <div className=" text-black flex flex-wrap  gap-40 justify-center ">
+                    <div className=" w-[400px] flex flex-col gap-5 justify-center items-center">
                         <div className="">
                             <h1 className="text-6xl font-extrabold ejemplotest">ENCUENTRA ROPA QUE SE ADAPTE A TU ESTILO</h1>
                         </div>
@@ -35,8 +35,8 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="">
-                        <img src="/images/photo_home.png" alt="" className="w-[400px]"/>
+                    <div className="w-[500px]  flex justify-center">
+                        <Image alt="Image" width={500} height={400} src={"https://res.cloudinary.com/dhnadfxhu/image/upload/v1764334745/316518255_11374581_1_oiifjz.png"}/>
                     </div>
                 </div>
                 <div className="h-[15vh] bg-black w-full text-white ">

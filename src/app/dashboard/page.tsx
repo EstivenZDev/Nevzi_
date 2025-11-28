@@ -12,11 +12,23 @@ import { div } from "framer-motion/client";
 import { Spinner } from "@heroui/react";
 import { FormCategorty } from '../../components/CreateCategoryForm/FormCategorty';
 
+interface ProductProps {
+  _id: string;
+  name: string;
+  image: string;
+  price: number;
+  status:boolean;
+  gender: string;
+  amount: number;
+  category: string
+}
+
+
 export default function DashboardPage() {
   const { status } = useSession();
   const [statusModal, setStatusModal] = useState(false)
   const [statusModalCategory, setStatusModalCategory] = useState(false)
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState<ProductProps[]>([])
   const [loading, setLoading] = useState(false)
   const router = useRouter();
 
@@ -71,7 +83,7 @@ export default function DashboardPage() {
         <div className="flex flex-wrap gap-8">
           {products?.length > 0 && products.map((product) => (
             <div key={product._id}>
-              <Card image={product.image} price={product.price} title={product.name} status={product.status} gender={product.gender} amount={product.amount} category={product.category.name} />
+              <Card image={product.image} price={product.price} title={product.name} status={product.status} gender={product.gender} amount={product.amount} />
             </div>
           ))}
         </div>
