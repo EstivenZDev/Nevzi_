@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { sendEmail } from "@/services/sendEmail";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 
