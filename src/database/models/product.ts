@@ -31,7 +31,7 @@ const ProductSchema = new Schema<ProductProps>({
     },
     status: { type: Boolean }
 
-}, { versionKey: false });
+}, { versionKey: false, timestamps: true });
 
 // Utiliza un patrón singleton para garantizar que solo se compile una instancia del modelo
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
