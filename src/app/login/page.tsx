@@ -6,23 +6,33 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { sendEmail } from "@/services/sendEmail";
+import { useRouter } from "next/router";
 
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Usar signIn con callbackUrl en lugar de redirect: false
         // Esto es más seguro y confiable en producción
-        await signIn("credentials", {
+        const res = await signIn("credentials", {
+            redirect: false,
             email,
             password,
-            callbackUrl: "/dashboard",
         });
+
+        if (res?.ok) {
+            router.push("/dashboard");
+        } else {
+            console.log("Login failed", res);
+            // mostrar mensaje al usuario según convenga
+        }
+
     };
 
     const handleGoogleLogin = () => {
