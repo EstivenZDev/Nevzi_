@@ -6,8 +6,19 @@ const protectedRoutes = ["/dashboard"];
 
 export async function middleware(req: NextRequest) {
 
+  const secret = process.env.NEXTAUTH_SECRET;
+
+    if (!secret) {
+    console.error("NEXTAUTH_SECRET no está definido");
+    return NextResponse.next();
+  }
+
   //Esta línea intenta leer el token JWT (el “pase de acceso”) del usuario desde las cookies que vienen en la petición req --- Pero para poder leer o descifrar ese token, necesitas una “clave secreta” 🔑 — ahí es donde entra NEXTAUTH_SECRET.
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ req, secret: secret });
+
+  // obtener el token de cookies
+
+  // const token = req.cookies.get("next-auth.session-token")?.value;
   const pathname = req.nextUrl.pathname;
 
   console.log("TOKEN EN MIDDLEWARE:", token);

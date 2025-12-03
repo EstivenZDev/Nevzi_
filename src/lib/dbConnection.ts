@@ -38,3 +38,20 @@ export async function dbConnection() {
   cached.conn = await cached.promise;
   return cached.conn;
 }
+
+
+// import mongoose from "mongoose";
+
+// mongoose.set('strictQuery', false);
+
+// // ...existing code...
+// const dbConnection = async () => {
+//   try {
+//     await mongoose.connect(process.env.MONGODB_URI!);
+//     console.log("MongoDB connected");
+//   } catch (error) {
+//     console.error("MongoDB connection error:", error);
+//   }
+// };
+
+// export default dbConnection;
