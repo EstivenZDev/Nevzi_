@@ -65,10 +65,10 @@ export default function DashboardPage() {
 
 
 
-  if (status === "unauthenticated") {
-    router.push("/login");
-    return null;
-  }
+  // if (status === "unauthenticated") {
+  //   router.push("/login");
+  //   return null;
+  // }
 
   const closeModal = () => {
     setStatusModal(false)
