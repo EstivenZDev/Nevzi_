@@ -13,6 +13,7 @@ export async function middleware(req: NextRequest) {
   console.log("TOKEN EN MIDDLEWARE:", token);
 
   if (protectedRoutes.includes(pathname)) {
+    console.log("el tokennnn",token);
     if (!token) {
 
       //y se cambia solo el path (/dashboard → /login). es decir, de app/dashboard/ a => app/login
