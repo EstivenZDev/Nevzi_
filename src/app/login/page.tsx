@@ -6,14 +6,14 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { sendEmail } from "@/services/sendEmail";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 
 export default function LoginPage() {
+    const router = useRouter()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
